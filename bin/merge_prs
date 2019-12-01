@@ -1,0 +1,75 @@
+#!/usr/bin/env python
+import os
+import subprocess as sp
+
+
+def merge(repo, prs):
+    dep_dir = os.path.join(os.environ["HOME"], "dependencies")
+    repo_dir = os.path.join(dep_dir, repo)
+    print("[+] %s %s, merging..." % (repo, ','.join(prs)))
+    if not os.path.isdir(repo_dir):
+        print("[!] %s does not exists" % repo_dir)
+        return False
+    depth = 1
+    prs2merge = []
+    for pr in prs:
+        git_cmd = [
+            "git",
+            "--git-dir=%s" % os.path.join(repo_dir, ".git"),
+            "--work-tree=%s" % repo_dir,
+        ]
+        try:
+            sp.check_call(git_cmd + [
+                "fetch",
+                "-q",
+                "origin",
+                "refs/pull/%s/head:%s" % (pr, pr)
+            ])
+        except sp.CalledProcessError:
+            # Probably the PR is already merged
+            continue
+        cmd = git_cmd + [
+            "rev-list",
+            "--count",
+            "--no-merges",
+            "origin/%s..%s" % (os.environ["VERSION"], pr)
+        ]
+        p = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.PIPE, encoding="utf8")
+        out, error = p.communicate()
+        print(error.strip())
+        if error.strip():
+            print("[!] %s" % error.strip())
+        else:
+            prs2merge.append(pr)
+            depth += int(out)
+    if not len(prs2merge):
+        return True
+    sp.call(git_cmd + ["fetch", "origin", "-q", "--depth=%s" % depth])
+    sp.call(git_cmd + ["checkout", "-qb", "merges", "origin/%s" % os.environ["VERSION"]])
+    for pr in prs2merge:
+        sp.call(git_cmd + ["merge", "-q", "--no-edit", pr])
+
+
+def parse_depfile():
+    build_dir = os.environ.get('TRAVIS_BUILD_DIR', os.environ['HOME'])
+    depfilename = os.path.join(build_dir, "oca_dependencies.txt")
+    if not os.path.isfile(depfilename):
+        return False
+    with open(depfilename) as depfile:
+        for line in depfile:
+            line = line.strip()
+            if not line.startswith('#merges'):
+                continue
+            parts = line.replace("#merges", "").split()
+            if len(parts) != 2:
+                print("[!]", line)
+                print(
+                    "[!] Wrong format, should be like: #merges web 1,2"
+                )
+            repo = parts[0]
+            prs = parts[1].split(",")
+            merge(repo, prs)
+
+
+if __name__ == "__main__":
+    parse_depfile()
