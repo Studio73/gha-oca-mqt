@@ -19,7 +19,6 @@ ENV TESTS 1
 ENV ODOO_REPO "odoo/odoo"
 ENV VERSION "10.0"
 COPY bin/* /usr/local/bin/
-ENTRYPOINT [ "entrypoint.sh" ]
 LABEL maintainer="Studio73" \
         org.label-schema.vendor="Studio73" \
         org.label-schema.url="https://www.studio73.es" \
