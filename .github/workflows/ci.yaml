@@ -1,0 +1,19 @@
+name: CI
+on:
+  push:
+    branches:
+      master
+  pull_request:
+    branches:
+      master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: ["10.0", "12.0"]
+    steps:
+      - uses: actions/checkout@v1
+      - name: ${{ matrix.version }}
+        run: docker build -f ${{ matrix.version }}/Dockerfile . -t gha-oca-mqt:${{ matrix.version }}
