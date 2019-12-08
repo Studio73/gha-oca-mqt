@@ -13,6 +13,7 @@ RUN apt-get install -y --no-install-recommends \
         && apt-get clean
 RUN wget -q -O - https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y --no-install-recommends nodejs
+RUN mkdir /root/.ssh && ssh-keyscan -H github.com >> /root/.ssh/known_hosts
 RUN pip install -r https://raw.githubusercontent.com/odoo/odoo/10.0/requirements.txt
 RUN pip install -r https://raw.githubusercontent.com/OCA/maintainer-quality-tools/master/requirements.txt
 ENV LINT_CHECK 0
