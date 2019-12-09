@@ -46,6 +46,18 @@ def merge(repo, prs):
     )
     for pr in prs2merge:
         sp.call(git_cmd + ["merge", "-q", "--no-edit", pr])
+    cmd = git_cmd + [
+        "diff-index",
+        "--name-only",
+        "--cached",
+        "origin/%s" % os.environ["VERSION"],
+    ]
+    p = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.PIPE, encoding="utf8")
+    out, error = p.communicate()
+    if "requirements.tx" in out.strip():
+        print("[+] %s/requirements.txt, installing..." % repo)
+        cmd = ["pip", "install", "-r", os.path.join(repo_dir, "requirements.txt")]
+        sp.call(cmd)
 
 
 def parse_depfile():
