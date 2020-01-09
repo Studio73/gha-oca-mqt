@@ -8,7 +8,7 @@ RUN apt-get install -y --no-install-recommends \
         postgresql-client wget git tcl gcc bzip2 expect-dev \
         python-lxml libxmlsec1-dev pkg-config libsasl2-dev \
         libldap2-dev libxml2-dev libxslt-dev zlib1g-dev libcups2-dev \
-        openssh-client \
+        openssh-client default-libmysqlclient-dev \
         && rm -rf /var/lib/apt/lists/* \
         && apt-get clean
 RUN wget -q -O - https://deb.nodesource.com/setup_10.x | bash -
