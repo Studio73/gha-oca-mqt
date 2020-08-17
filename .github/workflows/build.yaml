@@ -12,10 +12,16 @@ jobs:
         version: ["10.0", "11.0", "12.0", "13.0"]
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
       - name: Set pyversion
         id: pyversion
         run: if [ ${{ matrix.version }} == 10.0 ]; then echo ::set-output name=version::py2; else echo ::set-output name=version::py3; fi
+      - name: Git log
+        id: log
+        run: echo "::set-output name=message::$(git log --no-merges -1 --oneline)"
       - name: Build and push ${{ matrix.version }}
+        if: "!contains(steps.log.outputs.message, 'skip build')"
         uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
