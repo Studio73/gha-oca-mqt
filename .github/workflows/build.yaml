@@ -29,3 +29,6 @@ jobs:
           repository: studio73/gha-oca-mqt
           dockerfile: ${{ steps.pyversion.outputs.version }}/Dockerfile
           tags: ${{ matrix.version }}
+          build_args: VERSION=${{ matrix.version }}
+          add_git_labels: true
+

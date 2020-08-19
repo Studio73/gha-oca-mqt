@@ -30,7 +30,5 @@ ENV LINT_CHECK 0
 ENV TESTS 1
 ENV ODOO_REPO "odoo/odoo"
 COPY bin/* /usr/local/bin/
-LABEL maintainer="Studio73" \
-        org.label-schema.vendor="Studio73" \
-        org.label-schema.url="https://www.studio73.es" \
-        org.label-schema.vcs-url="https://github.com/Studio73/gha-oca-mqt"
+LABEL maintainer="Studio73"
+

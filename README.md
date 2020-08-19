@@ -4,3 +4,5 @@ GHA OCA MQT
 ===========
 
 Docker image for use [OCA/maintainer-quality-tools](https://github.com/OCA/maintainer-quality-tools) inside your Github Actions workflows
+
+[![Studio73](https://www.studio73.es/logo.png)](https://www.studio73.es)
