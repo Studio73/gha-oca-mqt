@@ -29,3 +29,6 @@ jobs:
           dockerfile: ${{ steps.pyversion.outputs.version }}/Dockerfile
           tags: ${{ matrix.version }}
           push: false
+          build_args: VERSION=${{ matrix.version }}
+          add_git_labels: true
+
