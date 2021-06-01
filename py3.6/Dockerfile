@@ -5,7 +5,7 @@ RUN mkdir -p /usr/share/man/man7
 RUN apt-get update --fix-missing \
         && apt-get upgrade -y
 RUN apt-get install -y --no-install-recommends \
-        postgresql-client wget tcl gcc bzip2 expect-dev \
+        build-essential postgresql-client wget tcl gcc bzip2 expect-dev \
         python-lxml libxmlsec1-dev pkg-config libsasl2-dev \
         libldap2-dev libxml2-dev libxslt-dev zlib1g-dev libcups2-dev \
         openssh-client default-libmysqlclient-dev \
