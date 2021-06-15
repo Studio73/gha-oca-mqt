@@ -29,7 +29,7 @@ def merge(repo, prs):
             "rev-list",
             "--count",
             "--no-merges",
-            "origin/%s..%s" % (os.environ["VERSION"], pr),
+            "origin/%s..heads/%s" % (os.environ["VERSION"], pr),
         ]
         p = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.PIPE, encoding="utf8")
         out, error = p.communicate()
